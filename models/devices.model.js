@@ -11,7 +11,7 @@ const deviceSchema = mongoose.Schema(
     deviceName: { type: String, required: true },
     status: {
       online: { type: Boolean, default: false },
-      lastSeen: { type: Date },
+      lastSeen: { type: Date , default: Date.now },
       batteryLevel: { type: Number, min: 0, max: 100, default: null },
     },
      lastLocation: {

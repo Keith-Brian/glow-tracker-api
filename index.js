@@ -9,6 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // importing models
 const Device = require('./models/devices.model.js');
+const Location = require('./models/locations.model.js');
 
 
 
@@ -41,6 +42,17 @@ app.post('/api/devices', async(req, res) => {
     }
 });
 
+// create new Location entry
+app.post('/api/locations', async(req, res) => {
+    try{
+        const location = await Location.create(req.body);
+        res.status(200).json(location);
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+});
+
 
 // start the server on PORT 3000
 app.get('/', (req, res) => {
@@ -52,6 +64,6 @@ app.listen( PORT, () => {
 });
 
 
-// custom routes here
+
 
 
