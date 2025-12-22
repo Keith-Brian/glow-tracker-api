@@ -13,10 +13,10 @@ const Location = require('./models/locations.model.js');
 
 // importing routes
 const deviceRoutes = require('./routes/devices.route.js');
-//const locationRoutes = require('./routes/locations.route.js');
+const locationRoutes = require('./routes/locations.route.js');
 
 app.use('/api/devices', deviceRoutes);
-//app.use('/api/locations', locationRoutes);
+app.use('/api/locations', locationRoutes);
 
 
 
@@ -38,26 +38,26 @@ const connectToDB = async() => {
 connectToDB();
 
 
-app.post('/api/devices', async(req, res) => {
-    try{
-        const device = await Device.create(req.body);
-        res.status(200).json(device);
-    }
-    catch (error) {
-        res.status(500).json({ message: 'Server Error', error: error.message });
-    }
-});
+// app.post('/api/devices', async(req, res) => {
+//     try{
+//         const device = await Device.create(req.body);
+//         res.status(200).json(device);
+//     }
+//     catch (error) {
+//         res.status(500).json({ message: 'Server Error', error: error.message });
+//     }
+// });
 
-// create new Location entry
-app.post('/api/locations', async(req, res) => {
-    try{
-        const location = await Location.create(req.body);
-        res.status(200).json(location);
-    }
-    catch (error) {
-        res.status(500).json({ message: 'Server Error', error: error.message });
-    }
-});
+// // create new Location entry
+// app.post('/api/locations', async(req, res) => {
+//     try{
+//         const location = await Location.create(req.body);
+//         res.status(200).json(location);
+//     }
+//     catch (error) {
+//         res.status(500).json({ message: 'Server Error', error: error.message });
+//     }
+// });
 
 
 // start the server on PORT 3000
