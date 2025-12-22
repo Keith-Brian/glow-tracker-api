@@ -11,6 +11,12 @@ app.use(express.urlencoded({ extended: true }));
 const Device = require('./models/devices.model.js');
 const Location = require('./models/locations.model.js');
 
+// importing routes
+const deviceRoutes = require('./routes/devices.route.js');
+//const locationRoutes = require('./routes/locations.route.js');
+
+app.use('/api/devices', deviceRoutes);
+//app.use('/api/locations', locationRoutes);
 
 
 
