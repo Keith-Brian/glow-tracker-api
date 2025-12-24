@@ -115,6 +115,8 @@ const updateUser = async (req, res) => {
   }
 }
 
+// TODO: add password reset functionality with OTP verification
+
 module.exports ={
     getAllUsers,
     createUser,
