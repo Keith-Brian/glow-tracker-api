@@ -14,7 +14,7 @@ router.post('/register', createUser);
 router.post('/login', loginUser);
 
 // find user by email (for password reset)
-router.post('/user/email/:email', findUserByEmail);
+router.get('/user', findUserByEmail); // change this to request query (which is easy)
  
 module.exports = router;
 

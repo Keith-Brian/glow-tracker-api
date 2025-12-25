@@ -69,7 +69,8 @@ const loginUser = async (req, res) => {
 
 const findUserByEmail = async (req, res) =>{
     try{
-        const user = User.findOne({email: req.body.email}).select('-password');
+        const {email} = req.query;
+        const user = await User.findOne({email}).select('-password');
 
         if(!user){
             return res.status(404).json({message: "User does not exist"});
@@ -77,7 +78,7 @@ const findUserByEmail = async (req, res) =>{
 
         res.status(200).json(user)
     }
-    catch{
+    catch (error){
         res.status(500).json({message: "Server Error", error: error.message});
     }
 } 
