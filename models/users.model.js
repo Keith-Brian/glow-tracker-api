@@ -9,6 +9,13 @@ const userSchema = mongoose.Schema({
         trim: true
     }, 
 
+    phone: {
+        type: String,
+        trim: true,
+        unique: true,
+        required: true
+    },
+
     email: {
         type: String, 
         unique: true,
@@ -37,15 +44,15 @@ const userSchema = mongoose.Schema({
     timestamps: true
 });
 
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function() {
     if (!this.isModified('password')) {
-        return next();
+        return;
     }
 
     // continue hashing the password
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    next();
+   // next();
 });
 
 // adding a method to compare exiting passwords (during login)

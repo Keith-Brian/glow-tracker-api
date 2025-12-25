@@ -15,6 +15,6 @@ router.post('/login', loginUser);
 
 // find user by email (for password reset)
 router.post('/user/email/:email', findUserByEmail);
-
+ 
 module.exports = router;
 
