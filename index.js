@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const sms = require('./configure/africastalking.configure.js');
 
 // middleware configuration
 app.use(express.json());
@@ -37,30 +38,33 @@ const connectToDB = async() => {
         console.error('Database connection error:', error);
     }
 }
+
 // connect to MongoDB
 connectToDB();
 
+//try send AT sms
 
-// app.post('/api/devices', async(req, res) => {
-//     try{
-//         const device = await Device.create(req.body);
-//         res.status(200).json(device);
-//     }
-//     catch (error) {
-//         res.status(500).json({ message: 'Server Error', error: error.message });
-//     }
-// });
+const sendOtp = async (phoneNumber, message) => {
+    const options = {
+        to: [phoneNumber],
+        message: message,
+        from: 'aftkng'
+    };
 
-// // create new Location entry
-// app.post('/api/locations', async(req, res) => {
-//     try{
-//         const location = await Location.create(req.body);
-//         res.status(200).json(location);
-//     }
-//     catch (error) {
-//         res.status(500).json({ message: 'Server Error', error: error.message });
-//     }
-// });
+    try{
+        const response = await sms.send(options);
+        return response;
+    }
+    catch (error){
+        console.error('Error sending OTP:', error);
+        throw new Error('Failed to send OTP');
+    }
+}
+
+//sendOtp('+254113268646', 'Hey KB - GlowTracker test message!');
+console.log('Hey my api key is ${process.env.AT_API_KEY}');
+
+
 
 
 // start the server on PORT 3000
