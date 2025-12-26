@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // import the auth controller
-const { getAllUsers, createUser, loginUser, findUserByEmail, verifyOtp } = require('../controllers/auth.controller.js');
+const { getAllUsers, createUser, loginUser, findUserByEmail, verifyOtp, forgotPassword, resetPassword } = require('../controllers/auth.controller.js');
 
 // route to get all users
 router.get('/users', getAllUsers);
@@ -18,6 +18,8 @@ router.get('/user', findUserByEmail); // change this to request query (?email=ex
 
 // routes to handle user-otp functions
 router.get('/verify', verifyOtp); // to be implemented
+router.get('/forgot', forgotPassword);
+router.get('/reset', resetPassword);
  
 module.exports = router;
 

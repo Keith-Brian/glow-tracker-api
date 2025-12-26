@@ -3,6 +3,9 @@ const Otp = require("../models/otp.model.js");
 const { generateOtp } = require("../utils/otpgenerator.utils.js");
 const sendOtp = require("../service/sendOtp.service.js");
 
+// import bcrypt
+const bcrypt = require('bcryptjs');
+
 
 
 // dealing with otp functions here
@@ -19,7 +22,7 @@ const handleOtp = async (phone, purpose) => {
     console.log('OTP saved successfully', otpEntry);
   }
   catch(error){
-    console.log("Cannot save otp to database");
+    console.log("Cannot save otp to database", error);
   }
   
   // send OTP via SMS
@@ -174,11 +177,40 @@ const updateUser = async (req, res) => {
 // TODO: add password reset functionality with OTP verification
 
 const forgotPassword = async (req, res) => {
-  const { phone } = req.params;
+  const { phone } = req.query;
 
   try{
     await handleOtp(phone, "RESET");
     res.status(200).json({ message: "OTP sent for password reset" });
+  }
+  catch(error){
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+}
+
+// verify the OTP for password reset and reset password
+const resetPassword = async (req, res) => {
+  try{
+    const { phone, otp, newPassword } = req.query;
+    const otpRecord = await Otp.findOne({
+      phone: phone,
+      code: otp,
+      purpose: "RESET",
+    });
+
+    // validate if the otp exists and is not expired
+    if (!otpRecord || otpRecord.expiresAt < new Date()) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const newHashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // update the user's password
+    await User.findOneAndUpdate({ phone: phone }, { password: newHashedPassword });
+    // delete used OTPs
+    await Otp.deleteMany({ phone: phone, purpose: "RESET" });
+    res.status(200).json({ message: "Password reset successful" });
   }
   catch(error){
     res.status(500).json({ message: "Server Error", error: error.message });
@@ -194,5 +226,7 @@ module.exports = {
   findUserByEmail,
   deleteUser,
   updateUser,
-  verifyOtp
+  verifyOtp,
+  forgotPassword,
+  resetPassword
 };
