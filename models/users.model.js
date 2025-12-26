@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
     phone: {
         type: String,
         trim: true,
-        unique: true,
+        unique: false, // set to false to allow multiple unverified users with same phone
         required: true
     },
 
