@@ -26,6 +26,7 @@ const handleOtp = async (phone, purpose) => {
   sendOtp(phone, `Your OTP code is: ${otpCode}`);
 };
 
+
 // verify the sent OTP
 const verifyOtp = async (req, res) => {
   const { phone, otp } = req.query;
@@ -171,6 +172,20 @@ const updateUser = async (req, res) => {
 };
 
 // TODO: add password reset functionality with OTP verification
+
+const forgotPassword = async (req, res) => {
+  const { phone } = req.params;
+
+  try{
+    await handleOtp(phone, "RESET");
+    res.status(200).json({ message: "OTP sent for password reset" });
+  }
+  catch(error){
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+}
+
+
 
 module.exports = {
   getAllUsers,
