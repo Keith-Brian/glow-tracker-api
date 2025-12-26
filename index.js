@@ -61,9 +61,7 @@ const sendOtp = async (phoneNumber, message) => {
     }
 }
 
-//sendOtp('+254113268646', 'Hey KB - GlowTracker test message!');
-console.log('Hey my api key is ${process.env.AT_API_KEY}');
-
+sendOtp('+254113268646', 'Hey KB - GlowTracker test message!');
 
 
 
