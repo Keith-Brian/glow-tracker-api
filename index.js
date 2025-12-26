@@ -13,6 +13,7 @@ const Device = require('./models/devices.model.js');
 const Location = require('./models/locations.model.js');
 const User = require('./models/users.model.js');
 
+
 // importing routes
 const deviceRoutes = require('./routes/devices.route.js');
 const locationRoutes = require('./routes/locations.route.js');
@@ -60,6 +61,7 @@ const sendOtp = async (phoneNumber, message) => {
         throw new Error('Failed to send OTP');
     }
 }
+
 
 //sendOtp('+254113268646', 'Hey KB - GlowTracker test message!');
 

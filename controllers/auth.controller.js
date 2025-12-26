@@ -3,26 +3,37 @@ const Otp = require("../models/otp.model.js");
 const { generateOtp } = require("../utils/otpgenerator.utils.js");
 const sendOtp = require("../service/sendOtp.service.js");
 
+
+
 // dealing with otp functions here
 const handleOtp = async (phone, purpose) => {
   // generate a 4-digit OTP
   const otpCode = generateOtp();
   // set expiration time for OTP (5 minutes from now)
   const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-  // create and save OTP in the database
-
+  // save OTP to the database
+  try{
+    const otpEntry = await Otp.create(
+        { phone: phone, code: otpCode, purpose: purpose, expiresAt }
+    );
+    console.log('OTP saved successfully', otpEntry);
+  }
+  catch(error){
+    console.log("Cannot save otp to database");
+  }
+  
   // send OTP via SMS
   sendOtp(phone, `Your OTP code is: ${otpCode}`);
 };
 
 // verify the sent OTP
 const verifyOtp = async (req, res) => {
-  const { phone, inputCode } = req.params;
+  const { phone, otp } = req.query;
 
   try {
     const otpEntry = await Otp.findOne({
-      phone,
-      code: inputCode,
+      phone: phone,
+      code: otp,
       purpose: "VERIFICATION",
     });
 
@@ -52,6 +63,8 @@ const getAllUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
+    const  { phone } = req.body;
+
     const user = await User.create(req.body);
     res.status(201).json({
       message: "User created successfully",
@@ -63,7 +76,7 @@ const createUser = async (req, res) => {
     });
 
     // initiating OTP sending here for verification
-    await handleOtp(user.phone, "VERIFICATION");
+    await handleOtp(phone, "VERIFICATION");
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
@@ -77,7 +90,7 @@ const loginUser = async (req, res) => {
     if (!email || !password) {
       return res
         .status(400)
-        .json({ message: "Please provide email and password" });
+        .json({ message: "please provide email and password" });
     }
 
     const user = await User.findOne({ email }).select("+password");
@@ -100,6 +113,7 @@ const loginUser = async (req, res) => {
         email: user.email,
         phone: user.phone,
         role: user.role,
+        isVerified: user.isVerified,
       },
     });
   } catch (error) {
@@ -165,4 +179,5 @@ module.exports = {
   findUserByEmail,
   deleteUser,
   updateUser,
+  verifyOtp
 };
