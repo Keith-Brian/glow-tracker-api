@@ -3,6 +3,9 @@ const Otp = require("../models/otp.model.js");
 const { generateOtp } = require("../utils/otpgenerator.utils.js");
 const sendOtp = require("../service/sendOtp.service.js");
 
+// include jwt for token generation
+const jwt = require('jsonwebtoken');
+
 // import bcrypt
 const bcrypt = require('bcryptjs');
 
@@ -109,9 +112,17 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid Credentials" });
     }
 
+    // generate JWT token
+    const token = jwt.sign(
+      { id: user._id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
     res.status(200).json({
       message: "Login successful",
       user: {
+        token: token,
         _id: user._id,
         name: user.name,
         email: user.email,
@@ -143,7 +154,6 @@ const findUserByEmail = async (req, res) => {
 };
 
 // delete a user from the profile
-
 const deleteUser = async (req, res) => {
   try {
     const user = await User.findOneAndDelete({ email: req.body.email });

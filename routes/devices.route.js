@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-// import the Device model
 const Device = require('../models/devices.model.js');
+const authMiddleware = require('../middleware/auth.middleware.js');
+
 
 // Route to get all devices for a specific user (controller))
-const { getAllDevices, getDeviceById, updateDevice, createDevice, deleteDevice } = require('../controllers/devices.controller.js');
+const { getAllDevices, getDeviceById, updateDevice, registerDevice, deleteDevice } = require('../controllers/devices.controller.js');
 
 // list all the devices in the dB location collection
 router.get('/', getAllDevices);
@@ -20,6 +21,7 @@ router.put('/:deviceId', updateDevice);
 router.delete('/:deviceId', deleteDevice);
 
 // Route to create a new device
-router.post('/', createDevice);
+router.post('/register', authMiddleware, registerDevice);
+
 
 module.exports = router;
