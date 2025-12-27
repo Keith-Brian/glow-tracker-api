@@ -4,7 +4,7 @@ const deviceSchema = mongoose.Schema(
   {
     deviceId: { type: String, required: true, unique: true, index: true },
     userId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
