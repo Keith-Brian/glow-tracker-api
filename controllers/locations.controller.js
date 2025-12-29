@@ -18,9 +18,6 @@ const addLiveLocation = async (req, res) => {
     const deviceIdAuth = req.device.deviceId;
     const { deviceId,location, speed, gpsFix, battery, signal } = req.body;
 
-    console.log("Device ID from auth middleware:", deviceIdAuth);
-    console.log("Device ID from request body:", deviceId);
-
     // make sure the deviceId in the token matches the deviceId in the request body
     if (deviceIdAuth !== deviceId) {
       return res.status(403).json({ message: "Device ID mismatch" });

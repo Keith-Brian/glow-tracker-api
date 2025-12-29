@@ -69,7 +69,7 @@ const sendOtp = async (phoneNumber, message) => {
 
 // start the server on PORT 3000
 app.get('/', (req, res) => {
-    res.send('Hi There, Glow Tracker');
+    res.send('Hi There, Glow Tracker Just is up and running!');
 });
 
 app.listen( PORT, () => {
