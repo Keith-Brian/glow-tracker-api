@@ -25,4 +25,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+    - run: |
+        touch .env
+        echo "${{secrets.KIONGOZI_API_ENV}}" > .env
+    - run: pm2 restart kiongozi-tracker-api
 
