@@ -10,7 +10,6 @@ const deviceAuthentication = (req, res, next) => {
     try{
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.device = {deviceId: decoded.deviceId};
-        res.status(200).json({ message: 'Device Authorized' });
         next();
     }
     catch (error) {
