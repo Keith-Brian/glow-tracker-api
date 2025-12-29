@@ -5,10 +5,8 @@ const sendOtp = require("../service/sendOtp.service.js");
 
 // include jwt for token generation
 const jwt = require('jsonwebtoken');
-
 // import bcrypt
 const bcrypt = require('bcryptjs');
-
 
 
 // dealing with otp functions here

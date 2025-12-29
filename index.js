@@ -66,6 +66,7 @@ const sendOtp = async (phoneNumber, message) => {
 //sendOtp('+254113268646', 'Hey KB - GlowTracker test message!');
 
 
+
 // start the server on PORT 3000
 app.get('/', (req, res) => {
     res.send('Hi There, Glow Tracker');
