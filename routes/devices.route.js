@@ -13,16 +13,17 @@ const { getAllDevices, getDeviceById, updateDevice,registerDevice, deleteDevice,
 
 
 // list all the devices in the dB location collection
-router.get('/', getAllDevices);
+
 
 // Route to create a new device
 router.post('/register', authMiddleware, registerDevice);
 //router.post('/handshake',deviceAuthentication ,deviceHandShake);
 router.get('/token', generateDeviceToken);
-router.post('/handshake',deviceAuthentication, deviceHandShake);
+router.get('/handshake',deviceAuthentication, deviceHandShake);
 
 // Route to get a specific device by deviceId
 router.get('/:deviceId', getDeviceById);
+router.get('/', getAllDevices);
 
 // Route to update a device's information
 router.put('/:deviceId', updateDevice);
