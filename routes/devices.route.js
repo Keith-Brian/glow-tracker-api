@@ -11,10 +11,6 @@ const deviceAuthentication = require('../middleware/device-auth.middleware.js');
 const { getAllDevices, getDeviceById, updateDevice,registerDevice, deleteDevice, deviceHandShake,generateDeviceToken} = require('../controllers/devices.controller.js');
 
 
-
-// list all the devices in the dB location collection
-
-
 // Route to create a new device
 router.post('/register', authMiddleware, registerDevice);
 //router.post('/handshake',deviceAuthentication ,deviceHandShake);
