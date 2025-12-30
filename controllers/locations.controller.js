@@ -1,5 +1,6 @@
 const Location = require("../models/locations.model.js");
 const Device = require("../models/devices.model.js");
+const { ListCollectionsCursor } = require("mongodb");
 
 //getting all live locations from the dataBase
 
@@ -16,7 +17,9 @@ const getAllLiveLocations = async (req, res) => {
 const addLiveLocation = async (req, res) => {
   try {
     const deviceIdAuth = req.device.deviceId;
-    const { deviceId,location, speed, gpsFix, battery, signal } = req.body;
+    const { deviceId,location,speed, gpsFix, battery, signal } = req.body;
+
+    const status = gpsFix ? "gps" : "heartbeat";
 
     // make sure the deviceId in the token matches the deviceId in the request body
     if (deviceIdAuth !== deviceId) {
@@ -30,15 +33,23 @@ const addLiveLocation = async (req, res) => {
       return res.status(404).json({ message: "Device not found" });
     }
 
-    const liveLocation = await Location.create({
-        deviceId: deviceId,
-        userId: device.userId,
-        location: location,
-        speed: speed,
-        gpsFix: gpsFix,
-        battery: battery,
-        signal: signal
-    });
+    // prepare location data
+    const liveLocationData = {
+      deviceId: deviceId,
+      status: status,
+      userId: device.userId,
+      gpsFix: gpsFix,
+      speed: speed,
+      battery: battery,
+      signal: signal,
+    };
+
+    if(gpsFix){
+      liveLocationData.location = location;
+      liveLocationData.speed = speed;
+    }
+
+    const liveLocation = await Location.create(liveLocationData);
     res.status(200).json(liveLocation);
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });

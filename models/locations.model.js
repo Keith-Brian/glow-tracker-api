@@ -5,9 +5,10 @@ const LocationSchema = mongoose.Schema(
   {
     deviceId: { type: String, required: true, index: true },
     userId: { type: String, ref: "User", required: true },
+    status: { type: String, enum: ["gps", "heartbeat"], required: true },
     location: {
-      type: { type: String, enum: ["Point"], default: "Point" },
-      coordinates: { type: [Number], required: true }, // [longitude, latitude]
+      type: { type: String, enum: ["Point"], required: function() { return this.status === "gps"; } },
+      coordinates: { type: [Number], required: function() { return this.status === "gps"; } }, // [longitude, latitude]
     },
     speed: { type: Number, default: null }, // in km/h
     gpsFix: { type: Boolean, default: false },
